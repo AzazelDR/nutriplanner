@@ -1,0 +1,101 @@
+Listado lago
+   Coatepeque
+	Casa Vista Veneto apartments
+	THE MAMBA HOUSE
+	Yakamoz Villa 21
+	Casa Prana
+	El Faro
+	Cabaña del Faro
+	Silver Lake
+	Hostal & Bar Xtream
+	Tiki Island
+	Captain Morgan
+	Restaurante y Hostal Romayor
+	Secreto de La Montaña
+	Cardedeu Hotel
+	Casa de adobe
+	Reflejo del Cielo
+	Amacuilco Hostal
+	Monte Carlo
+	LAS PIEDRAS
+	Mirador El Congo
+	Lake Cabinets
+	Montelago
+	Hotel Equinoccio
+	Casa Conacaste
+	Vista Turquesa El Salvador
+   ilopango
+	Hacienda San Agustin
+	Casa Montenegro
+	Hostal y restaurante San Carlos
+	Las Tres Piedras
+	Hotel y Restaurante El Faro
+	Vía Vela Ilopango
+	Hotel Familiar Apulo Ilopango
+	La casa del Lago Las Veraneras
+	La casa del lago Ilopango apancino
+	Hotel Vista Lago
+	Finca y Hostal Santa Eduviges
+	FINCA EL DORADO
+	Auto Hotel La Garita
+	Hotel San Antonio
+	Residencial Portico San Jacinto
+	Hotel Abrego
+	Hotel San Juan De La Isla
+	Hacienda del Lago
+	Perla De Azacualpa Hotel
+	Hotel Payaya Candelaria de la Frontera
+	Hotel Brunette
+	Altea Hostal
+	Velvet Hotel
+	Hotel Tolteka Plaza
+	Hostal Casa Verde Santa Ana
+	Hostal Las Puertas
+	Casa 25 hostal
+	Entrecafe Experience
+	El Olimpo
+	Eco cabaña Hostal Le Doratt
+	Ricks hostel
+	Kafen Hotel
+	Hotel Juayua
+	Hostal DEYLUWIN
+	Bourbon Hostal
+
+Listado otros
+   coatepeque
+	Quinta Sunrise
+	Rancho JSam
+	Quinta Moica
+	Rancho Channel
+	Quinta Monarca
+	Rancho San Gabriel
+	Quinta Los Patos
+	Quinta de El Faro
+	Quinta Acapulco
+	Villas Noelia
+	Rancho Alegre Coatepeque
+	Quinta Kassandra
+	RESTAURANTE RANCHO ALEGRE
+	Quinta Cantarrana
+	Quinta Sunset	
+	Villa Los Pinos
+	Quinta Piedradura
+	Quinta Sandoval
+	rancho el triunfo
+	Quinta Avanti
+	Quinta Roca Linda
+	Quinta Macallan
+	Quinta Emperador
+   Ilopango
+	Casa de oración Santísima Trinidad
+	Camping La joya de Apancino 
+	Victory Paradise Camping & Hiking
+	Ranch MTorres
+	Campamento Genezareth MCA
+	Camping & Hiking Corinto
+	Quinta America
+	Rancho Morataya
+	Rancho de Los Abuelos
+	Rancho los laureles
+	Villa Napoli Bed & Breakfast
+	EcoFinca Larache
