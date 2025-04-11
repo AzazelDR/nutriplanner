@@ -1,4 +1,5 @@
-🥗 NutriPlaner
+#🥗 NutriPlaner
+
 NutriPlaner es un sistema en línea inteligente diseñado para ofrecer recomendaciones personalizadas de planes nutricionales a través de un chatbot con inteligencia artificial. Su objetivo es facilitar el acceso a una alimentación saludable, adaptada a las necesidades y características de cada usuario. Con el objetivo de brindar una herramienta tecnológica accesible y confiable, que ayude a mejorar los hábitos alimenticios y fomente una vida más saludable.
 
 ✨ Características principales
