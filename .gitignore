@@ -1,0 +1,256 @@
+# ============================================================
+# Global (Linux, macOS, Windows) & Editor Files
+# ============================================================
+
+### Linux ###
+*~
+
+# Archivos temporales creados si un proceso sigue con un handle abierto de un archivo eliminado
+.fuse_hidden*
+
+# Preferencias de directorio de KDE
+.directory
+
+# Carpeta de basura de Linux, puede aparecer en cualquier partición o disco
+.Trash-*
+
+# Archivos .nfs creados cuando se elimina un archivo que aún se está accediendo
+.nfs*
+
+### macOS ###
+# Archivos y metadatos generales
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icono debe terminar con dos \r
+Icon
+
+# Miniaturas
+._*
+
+# Archivos que pueden aparecer en la raíz de un volumen
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directorios creados potencialmente en comparticiones AFP
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# Archivos generados por iCloud
+*.icloud
+
+### Windows ###
+# Archivos de caché de miniaturas de Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Archivos de volcado
+*.stackdump
+
+# Archivo de configuración de carpeta
+[Dd]esktop.ini
+
+# Papelera de reciclaje de uso compartido
+$RECYCLE.BIN/
+
+# Archivos instaladores de Windows
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Accesos directos de Windows
+*.lnk
+
+# ============================================================
+# Python (Backend)
+# ============================================================
+# Byte-compilados y optimizados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Extensiones en C
+*.so
+
+# Distribución / empaquetado
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller (archivos escritos por plantilla antes de la compilación)
+*.manifest
+*.spec
+
+# Logs del instalador
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Reportes de pruebas y cobertura
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Traducciones
+*.mo
+*.pot
+
+# Configuraciones comunes de frameworks y aplicaciones Python:
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx (documentación)
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Notebooks de Jupyter
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pipenv / pyenv / Poetry / pdm, etc.
+.pdm.toml
+# __pypackages__ se usa en algunos gestores de dependencias modernos:
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Archivos parsers de SageMath
+*.sage.py
+
+# Entornos virtuales
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de configuración de editores / IDEs
+.spyderproject
+.spyproject
+.ropeproject
+
+# Documentación generada por herramientas como mkdocs
+/site
+
+# Caché de type checkers y linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+.pyre/
+.pytype/
+
+# Símbolos de depuración de Cython
+cython_debug/
+
+# Configuración local de Poetry
+poetry.toml
+
+# Caché de ruff
+.ruff_cache/
+
+# Configuración de LSP
+pyrightconfig.json
+
+# ============================================================
+# Node.js / Next.js (Frontend)
+# ============================================================
+# Dependencias y estado de Yarn, PnP
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Logs y archivos de debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing & cobertura
+/coverage
+
+# Next.js / React
+/.next/
+/out/
+
+# Output de producción (build)
+/build
+
+# Archivos y carpetas específicos
+.DS_Store
+*.pem
+
+# Archivos de entorno local para Node
+.env*.local
+
+# Configuración de Vercel
+.vercel
+
+# Archivos de TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================================
+# Notas Adicionales para Monorepo
+# ============================================================
+# Si tu repositorio tiene estructura de carpetas separadas para backend y frontend, el .gitignore se aplicará
+# globalmente a todo el repositorio. Si necesitas reglas específicas dentro de cada carpeta, puedes crear
+# archivos .gitignore adicionales dentro de /backend y /frontend.
