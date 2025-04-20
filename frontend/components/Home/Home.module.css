@@ -1,12 +1,25 @@
 .main {
   padding: 2rem;
   margin: 0 auto;
-  background-color: #ffffff; /* Fondo claro */
+  background-color: var(--background);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-  width: fit-content; /* Ajusta el ancho al contenido */
+  box-shadow: 0 0 4px 4px rgba(255, 208, 0, 0.253);
+  width: fit-content;
+  max-width: 1200px;
+}
+@media (max-width: 768px) {
+  .main {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
 }
 
+@media (max-width: 480px) {
+  .cardsGrid {
+    grid-template-columns: 1fr; /* 1 columna en móvil */
+    gap: 1rem;
+  }
+}
 .hero {
   text-align: center;
   margin-bottom: 2rem;
@@ -14,18 +27,21 @@
 
 .title {
   font-size: 2.5rem;
-  color: var(--primary); /* Color principal */
+  color: var(--primary);
   margin-bottom: 0.5rem;
 }
-
+.linkWrapper {
+  display: block;
+  text-decoration: none;
+}
 .subtitle {
   font-size: 1.5rem;
-  color: rgb(148, 148, 148);
+  color: var(--foreground);
   margin-bottom: 1.5rem;
 }
 
 .features,
-.cta {
+.ctaSection {
   margin-bottom: 2rem;
 }
 
@@ -36,33 +52,45 @@
   text-align: left;
 }
 
-.list {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  font-size: 1.2rem;
-  color: rgb(148, 148, 148);
-  line-height: 1.6;
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 1.5rem;
 }
 
-.buttons {
+.card {
+  position: relative;
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--background);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
+  color: var(--foreground);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
-.button {
-  padding: 0.75rem 1.5rem;
-  background-color: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+.cardContent {
+  text-align: center;
+}
+
+.cardText {
+  margin: 0;
+}
+
+.ctaLink {
+  font-size: 1.25rem;
   text-decoration: none;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: var(--secondary);
+  font-weight: bold;
 }
-
-.button:hover {
-  background-color: rgb(21, 43, 26);
-  transform: translateY(-2px);
+.ctaLink:hover {
+  color: var(--primary);
 }
+  

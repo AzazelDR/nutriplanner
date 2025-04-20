@@ -3,7 +3,7 @@ import { ChatBot } from '@/components/ChatBot/ChatBot';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Asistente Virtual - NutriPlanner AI',
+  title: 'Asistente Virtual',
   description: 'Interactúa con nuestro asistente virtual para resolver tus dudas sobre nutrición.',
 };
 

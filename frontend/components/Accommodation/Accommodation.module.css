@@ -1,24 +1,36 @@
 .container {
   padding: 2rem;
   margin: 2rem auto;
-  background-color: #ffffff; /* Fondo blanco */
+  background-color: var(--background);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   max-width: 800px;
-  color: #2c3e50; /* Texto oscuro para contraste */
+  color: var(--foreground);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 95%;
+
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+  }
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+}
 .title {
   font-size: 2rem;
-  color: #27ae60; /* Verde para destacar el título */
+  color: var(--primary);
   margin-bottom: 1rem;
   text-align: center;
 }
 
 .description {
   font-size: 1.2rem;
-  color: #34495e; /* Texto ligeramente más oscuro */
+  color: var(--foreground);
   margin-bottom: 1.5rem;
   text-align: justify;
 }
@@ -26,13 +38,13 @@
 .loading {
   text-align: center;
   font-size: 1.2rem;
-  color: #f39c12; /* Naranja para el mensaje de carga */
+  color: var(--secondary);
 }
 
 .error {
   text-align: center;
   font-size: 1.2rem;
-  color: #e74c3c; /* Rojo para mensajes de error */
+  color: #e74c3c; /* rojo de error */
 }
 
 .list {
@@ -43,39 +55,34 @@
 
 .listItem {
   font-size: 1rem;
-  color: #2c3e50;
+  color: var(--foreground);
   margin-bottom: 0.5rem;
 }
 
 .subTitle {
   font-size: 1.5rem;
-  color: #2980b9; /* Azul para subtítulos */
+  color: var(--primary);
   margin-bottom: 1rem;
-  border-bottom: 2px solid #ecf0f1; /* Línea decorativa */
+  border-bottom: 2px solid var(--neutral-light);
   padding-bottom: 0.5rem;
 }
 
 .strongText {
-  color: #34495e; /* Resalta los textos en negrita */
+  color: var(--foreground);
 }
+
 .backButton {
   margin-top: 2rem;
   padding: 0.75rem 1.5rem;
-  background-color: #27ae60; /* Verde */
-  color: white;
+  background-color: var(--primary);
+  color: var(--background);
   border: none;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: bold;
-  cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
 .backButton:hover {
-  background-color: #219150; /* Verde más oscuro */
+  background-color: var(--secondary);
   transform: translateY(-2px);
-}
-
-.backButton:active {
-  transform: translateY(0);
 }

@@ -1,24 +1,39 @@
 :root {
-  --navbar-height: 4rem; /* Altura del Navbar */
-  --background: #f7f9fc; /* Fondo claro */
-  --foreground: #2c3e50; /* Texto oscuro */
-  --primary: #27ae60; /* Verde fresco */
-  --secondary: #a5d6a7; /* Verde suave */
-  --accent: #ff6f61; /* Color de acento */
+  --navbar-height: 4rem;
+
+  /* Paleta*/
+  --background:    #FFFFFF;
+  --foreground:    #1E1E1E;
+  --primary:       #0052CC;
+  --secondary:     #FFD600;
+  --accent:        #FD8709;
+  --leaf:          #E1C65B;
+  --neutral-light: #D9D9D9;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #2c3e50;
-    --foreground: #f7f9fc;
-    --primary: #2ecc71;
-    --secondary: #81c784;
-    --accent: #ff8a80;
+    --background:    #1E1E1E;
+    --foreground:    #F0F0F0;
+    --other:         #586b7e;
+    --primary:       #3399FF;
+    --secondary:     #FFDF33;
+    --accent:        #FF9933;
+    --leaf:          #D4B35E;
+    --neutral-light: #555555;
   }
 }
+@media (max-width: 768px) {
+  html { font-size: 90%; }  /* ~14.4px base en tablet */
+}
 
-html,
-body {
+@media (max-width: 480px) {
+  html { font-size: 85%; }  /* ~13.6px en móviles pequeños */
+}
+html {
+  font-size: 100%; /* 16px base */
+}
+html, body {
   max-width: 100vw;
   overflow-x: hidden;
 }
@@ -41,7 +56,6 @@ a {
   color: inherit;
   transition: color 0.3s ease;
 }
-
 a:hover {
   color: var(--primary);
 }
@@ -55,4 +69,6 @@ main {
   padding: 2rem;
   width: 100%;
   margin: 0 auto;
+
+
 }

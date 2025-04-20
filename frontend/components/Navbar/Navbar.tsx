@@ -1,32 +1,55 @@
 'use client';
 
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+import { motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
 
-export const Navbar = () => {
+const navItems = [
+  { href: '/', label: 'Inicio' },
+  { href: '/chatbot', label: 'Asistente' },
+  { href: '/accommodations-support', label: 'Soporte' },
+];
+
+export const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className={styles.navbar}>
+    <motion.header
+      className={styles.navbar}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: 'spring', stiffness: 120 }}
+    >
       <div className={styles.logo}>
         <Link href="/">NutriPlanner AI</Link>
       </div>
-      <nav className={styles.navLinks}>
-        <Link href="/" className={pathname === '/' ? styles.active : ''}>
-          Inicio
-        </Link>
-        <Link href="/chatbot" className={pathname === '/chatbot' ? styles.active : ''}>
-          Asistente
-        </Link>
-        <Link
-          href="/accommodations-support"
-          className={pathname === '/accommodations-support' ? styles.active : ''}
-        >
-          Soporte
-        </Link>
+
+      <button
+        className={styles.burger}
+        onClick={() => setOpen(o => !o)}
+        aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+      >
+        {open ? <X /> : <Menu />}
+      </button>
+
+      <nav className={`${styles.navLinks} ${open ? styles.show : ''}`}>  
+        {navItems.map(item => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`${styles.navLink} ${pathname === item.href ? styles.active : ''}`}
+            onClick={() => setOpen(false)}
+          >
+            <motion.span whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              {item.label}
+            </motion.span>
+          </Link>
+        ))}
       </nav>
-    </header>
+    </motion.header>
   );
 };

@@ -141,7 +141,7 @@ class BotService:
 
 # --- FastAPI App ---
 app = FastAPI()
-bot_service = BotService()
+bot_service = BotService() 
 
 @app.websocket('/ws/chatbot')
 async def websocket_endpoint(websocket: WebSocket):
