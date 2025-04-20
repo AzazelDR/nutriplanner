@@ -21,7 +21,6 @@ class BotService:
             f"https://generativelanguage.googleapis.com/v1beta2/"
             f"models/{self.model_id}:generateContent?key={self.api_key}"
         )
-        
         # Cargar datos locales (planes y lugares)
         self._load_accommodations()
         # Construir contexto base y reglas
@@ -58,7 +57,6 @@ class BotService:
                 {"role": "user", "content": f"Tienes acceso a estos datos: {data_str}"},
                 {"role": "assistant", "content": "Comprendo. Tengo acceso a los datos necesarios."}
             ])
-        # Reglas de formato
         reglas = (
             "Reglas estrictas para tus respuestas:\n"
             "1. Recomienda máximo 3 opciones relevantes\n"
@@ -74,15 +72,20 @@ class BotService:
             "4. Para temas no nutricionales: 'Lo siento, solo puedo ayudarte con temas de nutrición.'"
         )
         self.base_context.extend([
-            {"role": "user", "content": reglas}, 
+            {"role": "user", "content": reglas},
             {"role": "assistant", "content": "Entendido completamente. Seguiré el formato."}
         ])
 
     async def chat(self, websocket: WebSocket):
-        """Maneja la conexión WebSocket con reinicio limpio de conversación"""
+        """Maneja la conexión WebSocket y envía saludo inicial"""
         await websocket.accept()
         # Iniciar historial con contexto base
         self.conversation_history = self.base_context.copy()
+        # Saludo inicial
+        greeting = "¡Hola! Soy NutriPlanner AI, tu asistente de nutrición. ¿En qué puedo ayudarte hoy?"
+        # Añadir saludo al historial y enviar al cliente
+        self.conversation_history.append({"role": "assistant", "content": greeting})
+        await websocket.send_json({"message": f"<p>{greeting}</p>", "status": "success"})
         try:
             while True:
                 data = await websocket.receive_json()
@@ -102,7 +105,6 @@ class BotService:
         self.conversation_history.append({"role": "user", "content": user_message})
         ai_response = await self._get_ai_response(self.conversation_history)
         self.conversation_history.append({"role": "assistant", "content": ai_response})
-        # Limitar historial
         max_hist = 20 + len(self.base_context)
         if len(self.conversation_history) > max_hist:
             self.conversation_history = self.base_context + self.conversation_history[-20:]
