@@ -26,11 +26,4 @@ class AccommodationService:
         plan = self.get_plan(plan_id)
         if not plan:
             return f"Plan con ID {plan_id} no encontrado."
-        return f"[Ver plan: {plan['name']}](https://explore-sv-frontend.vercel.app/accommodation/{plan_id})"
-
-    def create_place_link(self, place_id: str) -> str:
-        """Genera el enlace para un lugar recomendado dado el ID."""
-        place = self.get_recommended_place(place_id)
-        if not place:
-            return f"Lugar con ID {place_id} no encontrado."
-        return f"[Ver lugar: {place['name']}](https://explore-sv-frontend.vercel.app/recommended_place/{place_id})"
+        return f"[Ver plan: {plan['name']}](https://nutriplanner-ia.vercel.app/accommodation/{plan_id})"
