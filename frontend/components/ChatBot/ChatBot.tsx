@@ -117,23 +117,17 @@ export const ChatBot: React.FC = () => {
 
   const renderMessage = (text: string, isUser: boolean) => {
     if (isUser) {
-      return (
-        <div className={styles.userMessageContent}>{text}</div>
-      );
+      return <div className={styles.userMessageContent}>{text}</div>;
     }
-    const sanitized = DOMPurify.sanitize(text, {
-      ALLOWED_TAGS: [
-        'p',
-        'br',
-        'a',
-        'strong',
-        'em',
-        'ul',
-        'ol',
-        'li',
-      ],
-      ALLOWED_ATTR: ['href', 'class'],
-    });
+  
+    // only sanitize if DOMPurify.sanitize is available (i.e. on the client)
+    const sanitized = typeof DOMPurify.sanitize === 'function'
+      ? DOMPurify.sanitize(text, {
+          ALLOWED_TAGS: ['p','br','a','strong','em','ul','ol','li'],
+          ALLOWED_ATTR: ['href','class']
+        })
+      : text;
+  
     return (
       <div className={styles.messageContent}>
         {parse(sanitized, {
@@ -150,7 +144,7 @@ export const ChatBot: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {node.children.map((child, idx) =>
+                  {node.children.map((child, i) =>
                     'data' in child ? child.data : null
                   )}
                 </a>
@@ -162,6 +156,7 @@ export const ChatBot: React.FC = () => {
       </div>
     );
   };
+  
 
   return (
     <div className={styles.chatbotContainer}>
