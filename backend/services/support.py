@@ -1,20 +1,16 @@
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
-from services.support import SupportService
+import json
+from functools import lru_cache
+from typing import List, Dict
 
-support_router = APIRouter()
-support_service = SupportService("doctores.json")
+class SupportService:
+    def __init__(self, data_file: str = "doctores.json"):
+        self.data_file = data_file
+        self.data = self._load_data()
 
-@support_router.get("/support", tags=["Support"])
-async def get_doctors():
-    try:
-        doctors = support_service.get_all()
-        return JSONResponse(
-            status_code=200,
-            content={"message": "Doctors found", "data": doctors},
-        )
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"message": f"Internal Server Error: {e}"},
-        )
+    @lru_cache(maxsize=1)
+    def _load_data(self) -> List[Dict]:
+        with open(self.data_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def get_all(self) -> List[Dict]:
+        return self.data
