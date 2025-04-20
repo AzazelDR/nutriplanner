@@ -62,15 +62,7 @@ export const AccommodationsSupport: React.FC = () => {
             <h2 className={styles.cardTitle}>{doc.Name}</h2>
             <h3 className={styles.cardSubtitle}>{doc.Especialidad}</h3>
             <p className={styles.cardText}>{doc.Descripcion}</p>
-            <p className={styles.cardText}>📞 {doc.Telefono}</p>
-            <a
-              href={doc.Link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.button}
-            >
-              Ver Perfil
-            </a>
+            <p className={styles.cardText}>📞 {doc.Telefono}</p>          
           </div>
         ))}
       </div>
