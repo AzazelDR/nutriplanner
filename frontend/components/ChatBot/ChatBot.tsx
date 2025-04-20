@@ -12,12 +12,9 @@ type Message = {
 
 export const ChatBot: React.FC = () => {
   // Mensaje inicial fijo
-  const initialGreeting =
-    '¡Hola! Soy NutriPlanner AI, tu asistente de nutrición. ¿En qué puedo ayudarte hoy?';
-  // Estado de mensajes comienza con el saludo
-  const [messages, setMessages] = useState<Message[]>([
-    { text: initialGreeting, isUser: false },
-  ]);
+// start with an empty chat; server will send the greeting
+const [messages, setMessages] = useState<Message[]>([]);
+
   const [input, setInput] = useState<string>('');
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isTyping, setIsTyping] = useState(false);
