@@ -25,7 +25,7 @@ export const ChatBot: React.FC = () => {
 
   useEffect(() => {
     const ws = new WebSocket(
-      'wss://exploresv-production.up.railway.app/chatbot'
+      'wss://nutriplanner-ia.up.railway.app/chatbot'
     );
 
     ws.onerror = () => {
