@@ -1,0 +1,135 @@
+[
+    {
+        "Name": "Dra. Marcela Arévalo",
+        "Especialidad": "Nutrición Clínica",
+        "Telefono": "503-7890-1122",
+        "Descripcion": "Trabajo en el área de nutrición clínica, ayudando a personas con enfermedades como diabetes, hipertensión y obesidad a mejorar su salud mediante una alimentación adecuada.",
+        "Link": "https://www.saludelsalvador.com/dra-marcela-arevalo"
+    },
+    {
+        "Name": "Dra. Verónica Campos",
+        "Especialidad": "Nutrición Deportiva",
+        "Telefono": "503-7620-9988",
+        "Descripcion": "Combino mi experiencia en nutrición y deporte para diseñar planes alimenticios que potencien el rendimiento físico y la recuperación de atletas y personas activas.",
+        "Link": "https://www.saluddeportiva.sv/dra-veronica-campos"
+    },
+    {
+        "Name": "Dra. Karla Menéndez",
+        "Especialidad": "Nutrición Pediátrica",
+        "Telefono": "503-7543-2211",
+        "Descripcion": "Trabajo con niños y adolescentes para establecer hábitos alimenticios saludables desde temprana edad y prevenir problemas como la desnutrición o el sobrepeso.",
+        "Link": "https://www.nutricioninfantil.sv/dra-karla-menendez"
+    },
+    {
+        "Name": "Dra. Alejandra Rivas",
+        "Especialidad": "Nutrición Materno-Infantil",
+        "Telefono": "503-7012-3344",
+        "Descripcion": "Me especializo en nutrición durante el embarazo y lactancia, brindando acompañamiento nutricional para el bienestar de la madre y el desarrollo del bebé.",
+        "Link": "https://www.nutricionmaternainfantil.sv/dra-alejandra-rivas"
+    },
+    {
+        "Name": "Dra. Ivonne Zelaya",
+        "Especialidad": "Nutrición en Trastornos Alimenticios",
+        "Telefono": "503-7284-5566",
+        "Descripcion": "Combino conocimientos en nutrición y salud mental para acompañar a personas que enfrentan trastornos como anorexia, bulimia o atracones.",
+        "Link": "https://www.saludmentalnutricional.sv/dra-ivonne-zelaya"
+    },
+    {
+        "Name": "Dra. Sofía Recinos",
+        "Especialidad": "Nutrición Funcional",
+        "Telefono": "503-7901-7788",
+        "Descripcion": "Trabajo desde un enfoque funcional, buscando el origen de los desequilibrios nutricionales y tratando condiciones como fatiga crónica o problemas digestivos.",
+        "Link": "https://www.nutricionfuncional.sv/dra-sofia-recinos"
+    },
+    {
+        "Name": "Dra. Lourdes Martínez",
+        "Especialidad": "Nutrición Comunitaria",
+        "Telefono": "503-7123-4567",
+        "Descripcion": "Trabajo en comunidades promoviendo la educación alimentaria y la prevención de enfermedades relacionadas con la mala nutrición.",
+        "Link": "https://www.nutricioncomunitaria.sv/dra-lourdes-martinez"
+    },
+    {
+        "Name": "Dra. Mariana Figueroa",
+        "Especialidad": "Nutrición Oncológica",
+        "Telefono": "503-7689-3311",
+        "Descripcion": "Me especializo en apoyar nutricionalmente a pacientes con cáncer, ayudando a mantener su fuerza y salud durante los tratamientos.",
+        "Link": "https://www.nutriciononcologica.sv/dra-mariana-figueroa"
+    },
+    {
+        "Name": "Dra. Silvia Argueta",
+        "Especialidad": "Nutrición Renal",
+        "Telefono": "503-7544-1123",
+        "Descripcion": "Trabajo con pacientes con enfermedad renal, adaptando sus dietas para preservar la función de los riñones y mejorar su calidad de vida.",
+        "Link": "https://www.nutricionrenal.sv/dra-silvia-argueta"
+    },
+    {
+        "Name": "Dra. Claudia Perdomo",
+        "Especialidad": "Nutrición y Diabetes",
+        "Telefono": "503-7902-8811",
+        "Descripcion": "Acompaño a personas con diabetes a controlar sus niveles de azúcar mediante planes alimenticios personalizados y educación continua.",
+        "Link": "https://www.nutriciondiabetes.sv/dra-claudia-perdomo"
+    },
+    {
+        "Name": "Dra. Teresa Hernández",
+        "Especialidad": "Nutrición Geriátrica",
+        "Telefono": "503-7650-9002",
+        "Descripcion": "Combino mis conocimientos en nutrición y geriatría para atender a personas mayores, previniendo la desnutrición y fortaleciendo su salud general.",
+        "Link": "https://www.nutricionmayores.sv/dra-teresa-hernandez"
+    },
+    {
+        "Name": "Dra. Miriam Carranza",
+        "Especialidad": "Nutrición Enteral y Parenteral",
+        "Telefono": "503-7432-8870",
+        "Descripcion": "Me dedico a la nutrición clínica hospitalaria, ofreciendo soporte nutricional a pacientes que requieren alimentación por sonda o intravenosa.",
+        "Link": "https://www.nutricionhospitalaria.sv/dra-miriam-carranza"
+    },
+    {
+        "Name": "Dra. Adriana Molina",
+        "Especialidad": "Nutrición Vegana y Vegetariana",
+        "Telefono": "503-7289-4432",
+        "Descripcion": "Acompaño a personas que siguen una dieta basada en plantas, asegurando que cubran todos los nutrientes necesarios de forma saludable.",
+        "Link": "https://www.nutricionvegetal.sv/dra-adriana-molina"
+    },
+    {
+        "Name": "Dra. Paula Aguilar",
+        "Especialidad": "Nutrición Integrativa",
+        "Telefono": "503-7991-2211",
+        "Descripcion": "Trabajo desde un enfoque integrativo que combina ciencia y bienestar para tratar problemas digestivos, hormonales y metabólicos.",
+        "Link": "https://www.nutricionintegrativa.sv/dra-paula-aguilar"
+    },
+    {
+        "Name": "Dr. Mauricio López",
+        "Especialidad": "Nutrición Clínica",
+        "Telefono": "503-7611-2200",
+        "Descripcion": "Trabajo con pacientes que padecen enfermedades crónicas como diabetes, hipertensión y obesidad para mejorar su salud a través de la alimentación.",
+        "Link": "https://www.nutricionclinica.sv/dr-mauricio-lopez"
+    },
+    {
+        "Name": "Dr. Eduardo Gómez",
+        "Especialidad": "Nutrición Deportiva",
+        "Telefono": "503-7698-5544",
+        "Descripcion": "Combino mi pasión por el deporte y la ciencia para crear planes de nutrición que ayuden a los atletas a alcanzar su máximo rendimiento.",
+        "Link": "https://www.deporteynutricion.sv/dr-eduardo-gomez"
+    },
+    {
+        "Name": "Dr. Óscar Molina",
+        "Especialidad": "Nutrición Pediátrica",
+        "Telefono": "503-7844-6611",
+        "Descripcion": "Trabajo con niños para asegurar que reciban la nutrición necesaria para un crecimiento y desarrollo óptimos.",
+        "Link": "https://www.nutricionpediatrica.sv/dr-oscar-molina"
+    },
+    {
+        "Name": "Dr. Esteban Chávez",
+        "Especialidad": "Nutrición Oncológica",
+        "Telefono": "503-7733-8912",
+        "Descripcion": "Acompaño a pacientes con cáncer con planes nutricionales que apoyen su tratamiento y bienestar general.",
+        "Link": "https://www.nutriciononcologica.sv/dr-esteban-chavez"
+    },
+    {
+        "Name": "Dr. Ricardo Herrera",
+        "Especialidad": "Nutrición Renal",
+        "Telefono": "503-7771-2034",
+        "Descripcion": "Me especializo en nutrición para personas con enfermedades renales, ayudando a prolongar la función renal mediante la alimentación.",
+        "Link": "https://www.nutricionrenal.sv/dr-ricardo-herrera"
+    }
+]

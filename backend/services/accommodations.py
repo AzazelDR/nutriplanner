@@ -16,11 +16,6 @@ class AccommodationService:
         planes = self.data.get("planes_nutricionales", [])
         return next((p for p in planes if str(p["id"]) == str(plan_id)), None)
 
-    def get_recommended_place(self, place_id: str):
-        """Busca un lugar recomendado por ID."""
-        lugares = self.data.get("lugares_recomendados", [])
-        return next((l for l in lugares if str(l["id"]) == str(place_id)), None)
-
     def create_plan_link(self, plan_id: str) -> str:
         """Genera el enlace para un plan nutricional dado el ID."""
         plan = self.get_plan(plan_id)

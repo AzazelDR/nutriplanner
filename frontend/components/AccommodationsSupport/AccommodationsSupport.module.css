@@ -14,12 +14,12 @@
     padding: 1.5rem;
   }
 }
-
 @media (max-width: 480px) {
   .container {
     padding: 1rem;
   }
 }
+
 .title {
   font-size: 1.8rem;
   color: var(--primary);
@@ -32,17 +32,56 @@
   margin-bottom: 2rem;
 }
 
-.button {
-  padding: 0.75rem 1.5rem;
+/* Lista de tarjetas */
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+/* Cada tarjeta */
+.card {
+  background-color: var(--background);
+  border: 1px solid var(--neutral-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  font-size: 1.4rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.cardSubtitle {
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.cardText {
+  font-size: 1rem;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+  flex-grow: 1;
+}
+
+.cardButton {
+  align-self: flex-start;
+  padding: 0.6rem 1.2rem;
   background-color: var(--primary);
   color: var(--background);
-  border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  text-decoration: none;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease;
 }
-.button:hover {
+
+.cardButton:hover {
   background-color: var(--secondary);
-  transform: translateY(-2px);
 }
