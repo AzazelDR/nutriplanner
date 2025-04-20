@@ -25,8 +25,8 @@ export const ChatBot: React.FC = () => {
 
   useEffect(() => {
     const ws = new WebSocket(
-      'wss://nutriplanner-ia.up.railway.app/chatbot'
-    );
+      'wss://nutriplanner.up.railway.app/chatbot'
+    ); 
 
     ws.onerror = () => {
       setMessages((prev) => [
