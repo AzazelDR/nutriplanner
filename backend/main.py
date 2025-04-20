@@ -14,7 +14,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "https://nutriplanner-ia.vercel.app",
-    "https://nutriplanner.up.railway.app"
+    "https://nutriplanner.up.railway.app",
 ]
 
 app.title = "Nutrition API - AR Nutricion"
