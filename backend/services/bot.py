@@ -34,69 +34,81 @@ class BotService:
         self.support_service = SupportService(doctors_file)
         self.doctors = self.support_service.get_all()
 
-        # ---------------------------------------------------------------------
-        # Historial inicial / system‑prompt
-        self.history = [
+       # --------------------------------------------------------------------
+        # HISTORIAL / SYSTEM PROMPTS
+        # --------------------------------------------------------------------
+        self.history: list[dict] = [
+            # PROMPT 1 – personalidad
             {
                 "role": "user",
                 "parts": (
-                    "Eres un nutricionista virtual experto. "
-                    "Tu tarea es recomendar planes nutricionales y, "
-                    "si detectas alergias, intolerancias o enfermedades, "
-                    "añadir un solo especialista de la lista disponible."
+                    "Actúa como un agente especialista en nutrición. "
+                    "Tu nombre es **AR Nutrición**."
                 ),
             },
-            {
-                "role": "model",
-                "parts": "Entendido, seré un nutricionista virtual experto.",
-            },
-            {
-                "role": "user",
-                "parts": f"Catálogo de planes disponibles: {self.plans}",
-            },
-            {
-                "role": "model",
-                "parts": "He cargado los planes nutricionales.",
-            },
+            {"role": "model", "parts": "¡Hola! Soy AR Nutrición."},
+
+            # PROMPT 2 – interacción y recetas con ingredientes
             {
                 "role": "user",
-                "parts": f"Lista de doctores especialistas: {self.doctors}",
+                "parts": (
+                    "Debes saludar e interactuar con los usuarios. "
+                    "Ellos te darán listados de alimentos que tienen en casa "
+                    "y tú debes proponer **recetas saludables** justificadas."
+                ),
             },
+            {"role": "model", "parts": "Entendido, pediré la lista de alimentos y sugeriré recetas."},
+
+            # PROMPT 3 – detectar padecimientos y sugerir doctor
             {
-                "role": "model",
-                "parts": "He cargado los doctores especialistas.",
+                "role": "user",
+                "parts": (
+                    "Si el usuario menciona un padecimiento, "
+                    "recomienda UN especialista adecuado de la siguiente lista: "
+                    f"{self.doctors}"
+                ),
             },
+            {"role": "model", "parts": "He cargado la lista de especialistas y los usaré cuando sea necesario."},
+
+            # PROMPT 4 – si no hay ingredientes suficientes
+            {
+                "role": "user",
+                "parts": (
+                    "Si el usuario no tiene suficientes alimentos para formar una receta saludable, "
+                    "explícale por qué y sugiérele ingredientes fáciles de conseguir, saludables y económicos."
+                ),
+            },
+            {"role": "model", "parts": "Comprendido, avisaré si faltan ingredientes y sugeriré opciones."},
         ]
 
-        # Reglas estrictas para Gemini
+        # --- Catálogo de planes como contexto --------------------------------
+        if self.plans:
+            self.history += [
+                {"role": "user", "parts": f"Catálogo de planes: {self.plans}"},
+                {
+                    "role": "model",
+                    "parts": "He cargado los planes nutricionales.",
+                },
+            ]
+
+        # --- Reglas de formato unificadas ------------------------------------
         reglas = (
-            "Reglas estrictas para tus respuestas:\n"
-            "1. Si el usuario NO menciona alergias, intolerancias ni enfermedades, "
-            "solo recomienda un máximo de 3 planes (formato bullet).\n"
-            "2. Si SÍ menciona alguna de esas condiciones, primero "
-            "recomienda hasta 3 planes, luego UN doctor adecuado "
-            "(nombre, especialidad, teléfono, link).\n"
-            "3. Usa exactamente este formato:\n\n"
-            "   Introducción breve\n"
-            "   Te recomiendo:\n\n"
-            "   - [Nombre] (descripción corta)\n"
-            "     Enlace: https://nutriplanner-ia.vercel.app/accommodation/{id}\n\n"
-            "   Frase motivacional final\n\n"
-            "Si añades doctor:\n"
-            "   \nTe recomiendo tambien este especialista con tu alergia, para asistencia personalizada:\n"
-            "   - Dr. Nombre (Especialidad)\n"
-            "   - Teléfono: +503 XXXXXXXX\n"
-            "   - Link: https://...\n\n"
-            "4. No incluyas precios ni datos adicionales.\n"
-            "5. Para temas no nutricionales: "
-            "'Lo siento, solo puedo ayudarte con nutrición o derivarte a un especialista.'"
+            "Reglas estrictas:\n"
+            "1. Si el usuario NO menciona alergias/intolerancias/enfermedades, "
+            "solo recomienda hasta 3 planes o recetas.\n"
+            "2. Si SÍ las menciona, además de los planes/recetas, añade UN doctor adecuado.\n"
+            "3. Cuando el usuario proporcione ingredientes, genera de 1 a 3 recetas: "
+            "   - Título en negrita\n"
+            "   - Lista corta de pasos\n"
+            "   - Breve justificación nutricional.\n"
+            "4. Si no hay ingredientes suficientes, díselo y sugiere al menos 3 alimentos fáciles de conseguir.\n"
+            "5. Usa enlaces en el formato:\n"
+            "     Enlace: https://nutriplanner-ia.vercel.app/accommodation/{id}\n"
+            "6. Sin precios ni datos personales adicionales."
         )
         self.history += [
             {"role": "user", "parts": reglas},
-            {
-                "role": "model",
-                "parts": "Comprendido. Seguiré las reglas al pie de la letra.",
-            },
+            {"role": "model", "parts": "Seguiré todas las reglas al pie de la letra."},
         ]
 
     # ---------------------------- WebSocket loop ----------------------------
