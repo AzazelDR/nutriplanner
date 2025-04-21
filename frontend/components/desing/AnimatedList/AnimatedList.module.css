@@ -1,0 +1,52 @@
+.scrollListContainer {
+  position: relative;
+  width: 100%;       /* full width of parent */
+  max-height: 600px;  /* altura máxima configurable */
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollList {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0;
+  padding: 8px 12px;
+  list-style: none;
+  color: var(--foreground);
+}
+
+.noScrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.noScrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.topGradient,
+.bottomGradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 24px;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.topGradient {
+  top: 0;
+  background: linear-gradient(to bottom, var(--background) 80%, transparent);
+}
+.bottomGradient {
+  bottom: 0;
+  background: linear-gradient(to top, var(--background) 80%, transparent);
+}
+
+.itemWrapper {
+  color: var(--foreground);
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+}

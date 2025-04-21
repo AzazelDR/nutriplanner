@@ -5,7 +5,7 @@
   width: 95%;
   background-color: var(--background);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px 4px rgba(255, 208, 0, 0.253);
   text-align: center;
 }
 
@@ -19,7 +19,10 @@
     padding: 1rem;
   }
 }
-
+.listItem {
+  list-style: none;   /* quita viñetas */
+  padding: 0;         /* o el espacio que prefieras */
+}   
 .title {
   font-size: 1.8rem;
   color: var(--primary);
@@ -44,10 +47,9 @@
 /* Cada tarjeta */
 .card {
   background-color: var(--background);
-  border: 1px solid var(--neutral-light);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.315);
   display: flex;
   flex-direction: column;
 }
@@ -80,8 +82,4 @@
   text-decoration: none;
   font-weight: bold;
   transition: background-color 0.3s ease;
-}
-
-.cardButton:hover {
-  background-color: var(--secondary);
 }

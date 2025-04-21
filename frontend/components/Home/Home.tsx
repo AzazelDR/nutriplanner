@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import SpotlightCard from '@/components/SpotlightCard/SpotlightCard';
+import SpotlightCard from '@/components/desing/SpotlightCard/SpotlightCard';
 import styles from './Home.module.css';
 
 const featureList = [
