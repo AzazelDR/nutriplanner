@@ -4,6 +4,7 @@ import regex as re
 from fastapi import WebSocket, WebSocketDisconnect
 import google.generativeai as genai
 from dotenv import load_dotenv
+from services.support import SupportService  # tu servicio de doctores
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -25,55 +26,33 @@ class BotService:
         except Exception:
             self.plans = []
 
-        # 2) Carga el listado de doctores especialistas
-        try:
-            with open(doctors_file, "r", encoding="utf-8") as f:
-                self.doctors = json.load(f)
-        except Exception:
-            self.doctors = []
+        # Inicializa el servicio de doctores
+        self.support_service = SupportService(doctors_file)
 
         # Construcción del historial inicial
         self.history = [
-            # System prompt
-            {
-                "role": "user",
-                "parts": (
-                    "Eres un nutricionista virtual experto. "
-                    "Tu única misión es recomendar planes nutricionales y, "
-                    "si el usuario menciona algún padecimiento, recomendarle "
-                    "el especialista más adecuado."
-                )
-            },
-            {
-                "role": "model",
-                "parts": "Entendido, seré un nutricionista virtual experto."
-            }
+            {"role":"user", "parts":(
+                "Eres un nutricionista virtual experto. "
+                "Tu única misión es recomendar planes nutricionales y, "
+                "si el usuario menciona algún padecimiento, recomendarle "
+                "el especialista más adecuado."
+            )},
+            {"role":"model", "parts":"Entendido, seré un nutricionista virtual experto."}
         ]
 
         # Contexto de planes
         if self.plans:
             self.history += [
-                {
-                    "role": "user",
-                    "parts": f"Tienes disponible este catálogo de planes: {self.plans}"
-                },
-                {
-                    "role": "model",
-                    "parts": "Comprendo, he cargado los planes nutricionales."
-                }
+                {"role":"user", "parts":f"Tienes disponible este catálogo de planes: {self.plans}"},
+                {"role":"model", "parts":"Comprendo, he cargado los planes nutricionales."}
             ]
 
         # Contexto de doctores
-        if self.doctors:
+        doctors = self.support_service.get_all()
+        if doctors:
             self.history += [
-                {
-                    "role": "user",
-                    "parts": f"También tienes disponible esta lista de doctores especialistas: {self.doctors}"
-                },
-                {
-                    "role": "model",
-                    "parts": "Perfecto, he cargado los doctores especialistas."
-                }
+                {"role":"user", "parts":f"También tienes disponible esta lista de doctores especialistas: {doctors}"},
+                {"role":"model", "parts":"Perfecto, he cargado los doctores especialistas."}
             ]
 
         # Reglas de formato
@@ -93,8 +72,8 @@ class BotService:
             "'Lo siento, solo puedo ayudarte con nutrición o derivarte a un especialista.'"
         )
         self.history += [
-            {"role": "user", "parts": reglas},
-            {"role": "model", "parts": "Entendido, seguiré esas reglas estrictamente."}
+            {"role":"user","parts":reglas},
+            {"role":"model","parts":"Entendido, seguiré esas reglas estrictamente."}
         ]
 
     async def chat(self, ws: WebSocket):
@@ -107,28 +86,45 @@ class BotService:
 
         try:
             while True:
-                data = await ws.receive_json()
-                user_msg = data.get("message", "").strip()
+                data    = await ws.receive_json()
+                user_msg= data.get("message","").strip()
                 if not user_msg:
                     await ws.send_json({
-                        "message": "No recibí tu mensaje, inténtalo de nuevo.",
-                        "status": "error"
+                        "message":"No recibí tu mensaje, inténtalo de nuevo.",
+                        "status":"error"
                     })
                     continue
-                resp = chat.send_message(user_msg)
-                raw = resp.candidates[0].content.parts[0].text
 
-                # Formatear enlaces Markdown → HTML
+                # ——— Detectamos padecimiento y enviamos doctor ———
+                if re.search(r"\b(alergi[ao]|diabet|hipertens|trastorn)\b", user_msg, re.IGNORECASE):
+                    doctors = self.support_service.get_all()
+                    # .. aquí podrías filtrar mejor según especialidad ..
+                    doc = doctors[0]
+                    texto_doc = (
+                        "He visto que mencionas un padecimiento.\n\n"
+                        "Te recomiendo el siguiente especialista:\n\n"
+                        f"- {doc['Name']} ({doc['Especialidad']})\n"
+                        f"  Descripción: {doc['Descripcion']}\n"
+                        f"  Teléfono: {doc['Telefono']}\n"
+                        f"  Link: {doc['Link']}\n\n"
+                        "¡Espero que te sea de ayuda!"
+                    )
+                    # Envolvemos cada línea en <p>
+                    html = "".join(f"<p>{línea}</p>" for línea in texto_doc.split("\n"))
+                    await ws.send_json({"message": html, "status": "success"})
+                    continue
+                # ————————————————————————————————————————————
+
+                # Si no es padecimiento, va a Gemini
+                resp      = chat.send_message(user_msg)
+                raw       = resp.candidates[0].content.parts[0].text
                 formatted = self._format_response(raw)
                 await ws.send_json({"message": formatted, "status": "success"})
-
         except WebSocketDisconnect:
             print("WebSocket desconectado")
         except Exception as e:
-            await ws.send_json({
-                "message": f"Error interno: {e}",
-                "status": "error"
-            })
+            await ws.send_json({"message":f"Error interno: {e}","status":"error"})
+
     def _format_response(self, text: str) -> str:
         # Markdown [label](url) → <a>
         def md_link(m):
