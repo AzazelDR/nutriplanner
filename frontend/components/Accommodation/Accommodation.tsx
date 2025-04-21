@@ -83,16 +83,6 @@ export const Accommodation: FC<{ accommodationId: string }> = ({
           </li>
         ))}
       </ul>
-      <h2 className={styles.subTitle}>Lugar de Referencia</h2>
-      <p>
-        <span className={styles.strongText}>Nombre:</span> {planData.lugar_referencia.nombre}
-      </p>
-      <p>
-        <span className={styles.strongText}>Ubicación:</span> {planData.lugar_referencia.ubicacion}
-      </p>
-      <p>
-        <span className={styles.strongText}>Contacto:</span> {planData.lugar_referencia.contacto}
-      </p>
       {/* Botón para regresar al chat */}
       <button className={styles.backButton} onClick={() => router.push('/chatbot')}>
         Regresar al Chat
