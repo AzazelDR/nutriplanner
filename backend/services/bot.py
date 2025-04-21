@@ -68,18 +68,25 @@ class BotService:
             {"role": "model", "parts": "Entendido, seguiré esas reglas estrictamente."}
         ]
     def _format_response(self, text: str) -> str:
-        """
-        Convierte cualquier enlace Markdown [Etiqueta](URL) en un <a> con clase,
-        y envuelve cada línea en <p> para que el front lo renderice adecuadamente.
-        """
-        def repl(m):
+        # Primero pasamos cualquier Markdown [Etiqueta](URL) a <a>…
+        def md_link(m):
             label, url = m.group(1), m.group(2)
             return f'<a href="{url}" class="recommendation-link" target="_blank">{label}</a>'
 
-        # Markdown links a HTML
-        html = re.sub(r"\[([^\]]+)\]\((https?://[^\)]+)\)", repl, text)
+        html = re.sub(
+            r"\[([^\]]+)\]\((https?://[^\)]+)\)",
+            md_link,
+            text
+        )
 
-        # wrap en <p>
+        # Ahora detectamos líneas tipo "Enlace: https://…"
+        html = re.sub(
+            r"Enlace:\s*(https?://\S+)",
+            lambda m: f'<a href="{m.group(1)}" class="recommendation-link" target="_blank">Ver plan</a>',
+            html
+        )
+
+        # Por último envolvemos cada línea en <p>
         return "".join(
             f"<p>{line}</p>" if line.strip() else "<p></p>"
             for line in html.split("\n")
