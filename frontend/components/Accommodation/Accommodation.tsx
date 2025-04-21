@@ -17,7 +17,7 @@ export const Accommodation: FC<{ accommodationId: string }> = ({
     const getPlanData = async () => {
       try {
         const response = await axios.get(
-          `https://exploresv-production.up.railway.app/accommodation/${accommodationId}`
+          `https:/nutriplanner.up.railway.app/accommodation/${accommodationId}`
         );
 
         console.log('Respuesta de la API:', response.data);
