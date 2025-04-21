@@ -57,16 +57,19 @@ class BotService:
         # ---------------- reglas estrictas
         reglas = (
             "Reglas estrictas:\n"
-            "1. Si el usuario NO menciona alergias/padecimientos, sugiere cuantas recetas sean útiles y hasta 3 planes.\n"
-            "2. Si SÍ menciona padecimiento, añade UN doctor adecuado.\n"
-            "3. Cuando dé ingredientes, genera tantas recetas como creas necesarias (≥1), con:\n"
-            "   • Título en negrita\n   • Lista de pasos\n   • Justificación breve.\n"
-            "4. Si no hay ingredientes suficientes, explícalo y sugiere 3 alimentos fáciles de conseguir.\n"
-            "5. Usa enlaces así: Enlace: https://nutriplanner-ia.vercel.app/accommodation/{id}\n"
-            "6. Nada de precios ni datos personales.\n"
-            "7. Encabeza cada receta con “🍽️”.\n"
-            "8. Empieza cada paso con “➡️” y cada justificación con “✅”.\n"
-            "9. Separa secciones con una línea que contenga solo “———”."
+            "1. Si el usuario NO menciona alergias o padecimientos, sugiere recetas útiles (1-2) y hasta 2 planes nutricionales relevantes.\n"
+            "2. Si el usuario menciona un padecimiento, incluye UNA recomendación de un doctor adecuado de la lista.\n"
+            "3. Cuando el usuario proporcione ingredientes, genera recetas claras y concisas (1-2), asegurándote de incluir:\n"
+            "   • Título destacado.\n   • Lista de pasos simples y numerados.\n   • Justificación breve y relevante.\n"
+            "4. Si los ingredientes proporcionados son insuficientes, explica por qué y sugiere 2 alimentos fáciles de conseguir.\n"
+            "5. Usa enlaces en este formato: Enlace: https://nutriplanner-ia.vercel.app/accommodation/{id}\n"
+            "6. No incluyas precios, datos personales ni información técnica innecesaria.\n"
+            "7. Encabeza cada receta con “🍴” para mayor claridad.\n"
+            "8. Inicia la lista de pasos de cada plan con “➡️” y cada justificación con “💡”.\n"
+            "9. Separa secciones con una línea que contenga solo “———”.\n"
+            "10. Al mencionar un plan nutricional, utiliza únicamente su nombre en el título, evitando mostrar identificadores técnicos o detalles de programación.\n"
+            "11. Mantén un tono profesional, amigable y accesible en todas las respuestas.\n"
+            "12. Presenta la información de manera visualmente limpia, utilizando listas y párrafos cortos para evitar saturar al usuario."
         )
         self.history += [
             {"role": "user",  "parts": reglas},
