@@ -20,7 +20,7 @@ export const ChatBot = () => {
     // Limpiar mensajes al iniciar (esto se ejecuta al montar el componente)
     setMessages([]);
     
-    const ws = new WebSocket('wss://exploresv-production.up.railway.app/chatbot');
+    const ws = new WebSocket('wss://nutriplanner.up.railway.app/chatbot');
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
