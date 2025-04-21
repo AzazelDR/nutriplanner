@@ -18,7 +18,7 @@ class BotService:
         self.model_id = 'gemini-2.0-flash'
         # Endpoint REST de Gemini generateContent
         self.endpoint = (
-            f"https://generativelanguage.googleapis.com/v1beta2/"
+            f"https://generativelanguage.googleapis.com/v1beta/"
             f"models/{self.model_id}:generateContent?key={self.api_key}"
         )
         # Cargar datos locales (planes y lugares)
