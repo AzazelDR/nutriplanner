@@ -17,7 +17,7 @@ export const AccommodationsSupport: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket('wss://nutriplanner.up.railway.app/ws/support');
+    const ws = new WebSocket('wss://nutriplanner.up.railway.app/support');
   
     ws.onopen = () => console.log('WS soporte abierto');
     ws.onerror = () => setError('⚠️ No se pudo conectar al servicio de soporte.');
