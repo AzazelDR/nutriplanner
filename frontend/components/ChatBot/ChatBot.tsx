@@ -61,7 +61,9 @@ export const ChatBot = () => {
     if (isUser) return <div className={styles.userText}>{msg}</div>;
 
     const safe = DOMPurify.sanitize(msg, {
-      ALLOWED_TAGS: ['p', 'br', 'a', 'strong', 'em', 'ul', 'ol', 'li'],
+      ALLOWED_TAGS: [
+        'p', 'br', 'a', 'strong', 'em', 'ul', 'ol', 'li', 'span'
+      ],
       ALLOWED_ATTR: ['href', 'class', 'target', 'rel']
     });
     return (

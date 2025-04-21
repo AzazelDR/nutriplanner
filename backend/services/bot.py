@@ -80,10 +80,10 @@ class BotService:
             "   Introducción breve\n"
             "   Te recomiendo:\n\n"
             "   - [Nombre] (descripción corta)\n"
-            "     Enlace o contacto: https://nutriplanner-ia.vercel.app/accommodation/{id}\n\n"
+            "     Enlace: https://nutriplanner-ia.vercel.app/accommodation/{id}\n\n"
             "   Frase motivacional final\n\n"
             "Si añades doctor:\n"
-            "   Te recomiendo tambien este especialista con tu alergia, para asistencia personalizada:\n"
+            "   \nTe recomiendo tambien este especialista con tu alergia, para asistencia personalizada:\n"
             "   - Dr. Nombre (Especialidad)\n"
             "   - Teléfono: +503 XXXXXXXX\n"
             "   - Link: https://...\n\n"
@@ -141,13 +141,13 @@ class BotService:
     # -------------------------- Formateo utilitario -------------------------
     def _format_response(self, text: str) -> str:
         """
-        • Convierte [etiqueta](url) en <a class="recommendation-link">.
-        • Reemplaza “Enlace o contacto: URL” por el mismo anchor.
-        • Envuelve cada línea en <p>.
+        • [etiqueta](url)  -> <a class="recommendation-link">etiqueta</a>
+        • 'Enlace o contacto: URL' -> mismo anchor, con el nombre real del plan
+        • Cada línea va envuelta en <p>
         """
-        html = text  # <- punto de partida
+        html = text  # punto de partida
 
-        # 1) Markdown [etiqueta](url) -> <a>
+        # 1) Markdown [etiqueta](url) -> anchor
         html = re.sub(
             r"\[([^\]]+)\]\((https?://[^\)]+)\)",
             lambda m: (
@@ -157,22 +157,29 @@ class BotService:
             html,
         )
 
-        # 2) “Enlace o contacto: URL” -> <a>
+        # 2) 'Enlace o contacto:'  /  'Enlace:' -> anchor con nombre del plan
         def repl_plan_link(m):
             url = m.group(1)
-            match = re.search(r"/accommodation/(\\d+)", url)
-            if match:
-                pid = int(match.group(1))
+            match_id = re.search(r"/accommodation/(\d+)", url)
+            if match_id:
+                pid = int(match_id.group(1))
                 plan = next((p for p in self.plans if p.get("id") == pid), None)
                 label = plan["nombre"] if plan else "Ver plan"
             else:
                 label = "Ver link"
+
             return (
                 f'<a href="{url}" class="recommendation-link" '
                 f'target="_blank" rel="noopener noreferrer">{label}</a>'
             )
 
-        html = re.sub(r"Enlace:\s*(https?://\S+)", repl_plan_link, html)
+        # admite cualquier variante: Enlace: ó Enlace o contacto:
+        html = re.sub(
+            r"Enlace(?:\s+o\s+contacto)?:\s*(https?://\S+)",
+            repl_plan_link,
+            html,
+            flags=re.IGNORECASE,
+        )
 
         # 3) <p> por línea
         return "".join(
