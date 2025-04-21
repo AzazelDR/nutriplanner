@@ -10,21 +10,25 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 class BotService:
-    def __init__(
-        self,
+    def __init__(self,
         plans_file: str = "accommodations.json",
         doctors_file: str = "doctores.json"
     ):
-        # Modelo de Gemini
         self.model = genai.GenerativeModel("gemini-2.0-flash")
 
-        # 1) Carga los planes nutricionales
+        # 1) cargar planes
         try:
             with open(plans_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 self.plans = data.get("planes_nutricionales", [])
-        except Exception:
+        except:
             self.plans = []
+
+        try:
+            with open(doctors_file, "r", encoding="utf-8") as f:
+                self.doctors = json.load(f)
+        except:
+            self.doctors = []
 
         # Inicializa el servicio de doctores
         self.support_service = SupportService(doctors_file)
@@ -80,131 +84,69 @@ class BotService:
         await ws.accept()
         chat = self.model.start_chat(history=self.history)
 
-        # Saludo inicial
-        saludo = "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?"
-        await ws.send_json({"message": saludo, "status": "success"})
+        # saludo inicial
+        await ws.send_json({"message": "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?", "status": "success"})
 
         try:
             while True:
-                data     = await ws.receive_json()
+                data = await ws.receive_json()
                 user_msg = data.get("message", "").strip()
                 if not user_msg:
-                    await ws.send_json({
-                        "message": "No recibí tu mensaje, inténtalo de nuevo.",
-                        "status": "error"
-                    })
+                    await ws.send_json({"message": "No recibí tu mensaje, inténtalo de nuevo.", "status": "error"})
                     continue
 
-                # Detectamos si menciona un plan y/o un padecimiento
-                tiene_plan    = bool(re.search(r"\bplan\b", user_msg, re.IGNORECASE))
-                tiene_enfer   = bool(re.search(r"\b(alergi[ao]|diabet|hipertens|trastorn)\b", user_msg, re.IGNORECASE))
+                # --- vamos a generar primero el plan con Gemini ---
+                resp = chat.send_message(user_msg)
+                raw = resp.candidates[0].content.parts[0].text
+                formatted_plans = self._format_response(raw)
 
-                if tiene_plan or tiene_enfer:
-                    html_total = ""
-
-                    # —— Si pide plan, preguntamos a Gemini y formateamos —— 
-                    if tiene_plan:
-                        resp      = chat.send_message(user_msg)
-                        raw       = resp.candidates[0].content.parts[0].text
-                        html_plan = self._format_response(raw)
-                        html_total += html_plan
-
-                    # —— Si menciona enfermedad, añadimos ficha del doctor —— 
-                    if tiene_enfer:
-                        doctores = self.support_service.get_all()
-                        doc       = doctores[0]  # o filtrado según especialidad
-                        texto_doc = (
-                            "He visto que mencionas un padecimiento.\n\n"
-                            "Te recomiendo el siguiente especialista:\n\n"
-                            f"- {doc['Name']} ({doc['Especialidad']})\n"
-                            f"  Descripción: {doc['Descripcion']}\n"
-                            f"  Teléfono: {doc['Telefono']}\n"
-                            f"  Link: {doc['Link']}\n\n"
-                            "¡Espero que te sea de ayuda!"
-                        )
-                        # envolvemos cada línea en <p>
-                        html_doc = "".join(f"<p>{línea}</p>" for línea in texto_doc.split("\n"))
-                        html_total += html_doc
-
-                    await ws.send_json({"message": html_total, "status": "success"})
-                    continue
-
-                # —— Si no es ni plan ni padecimiento, va directo a Gemini —— 
-                resp      = chat.send_message(user_msg)
-                raw       = resp.candidates[0].content.parts[0].text
-                formatted = self._format_response(raw)
-                await ws.send_json({"message": formatted, "status": "success"})
+                # --- si hay alergia, añadimos doctor ---
+                if re.search(r'\b(alergi[ao]|diabet|hipertens)\b', user_msg, re.IGNORECASE):
+                    doc = self.support_service.get_all()[0]
+                    texto_doc = (
+                        "<p>He visto que mencionas un padecimiento.</p>"
+                        "<p>Te recomiendo el siguiente especialista:</p>"
+                        f"<p>- {doc['Name']} ({doc['Especialidad']})</p>"
+                        f"<p>  Descripción: {doc['Descripcion']}</p>"
+                        f"<p>  Teléfono: {doc['Telefono']}</p>"
+                        f"<p>  Link: <a href=\"{doc['Link']}\" class=\"recommendation-link\" target=\"_blank\">{doc['Name']}</a></p>"
+                        "<p>¡Espero que te sea de ayuda!</p>"
+                    )
+                    full = formatted_plans + texto_doc
+                    await ws.send_json({"message": full, "status": "success"})
+                else:
+                    # solo planes
+                    await ws.send_json({"message": formatted_plans, "status": "success"})
 
         except WebSocketDisconnect:
             print("WebSocket desconectado")
         except Exception as e:
             await ws.send_json({"message": f"Error interno: {e}", "status": "error"})
-        await ws.accept()
-        chat = self.model.start_chat(history=self.history)
-
-        # Saludo inicial
-        saludo = "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?"
-        await ws.send_json({"message": saludo, "status": "success"})
-
-        try:
-            while True:
-                data    = await ws.receive_json()
-                user_msg= data.get("message","").strip()
-                if not user_msg:
-                    await ws.send_json({
-                        "message":"No recibí tu mensaje, inténtalo de nuevo.",
-                        "status":"error"
-                    })
-                    continue
-
-                # ——— Detectamos padecimiento y enviamos doctor ———
-                if re.search(r"\b(alergi[ao]|diabet|hipertens|trastorn)\b", user_msg, re.IGNORECASE):
-                    doctors = self.support_service.get_all()
-                    # .. aquí podrías filtrar mejor según especialidad ..
-                    doc = doctors[0]
-                    texto_doc = (
-                        "He visto que mencionas un padecimiento.\n\n"
-                        "Te recomiendo el siguiente especialista:\n\n"
-                        f"- {doc['Name']} ({doc['Especialidad']})\n"
-                        f"  Descripción: {doc['Descripcion']}\n"
-                        f"  Teléfono: {doc['Telefono']}\n"
-                        f"  Link: {doc['Link']}\n\n"
-                        "¡Espero que te sea de ayuda!"
-                    )
-                    # Envolvemos cada línea en <p>
-                    html = "".join(f"<p>{línea}</p>" for línea in texto_doc.split("\n"))
-                    await ws.send_json({"message": html, "status": "success"})
-                    continue
-                # ————————————————————————————————————————————
-
-                # Si no es padecimiento, va a Gemini
-                resp      = chat.send_message(user_msg)
-                raw       = resp.candidates[0].content.parts[0].text
-                formatted = self._format_response(raw)
-                await ws.send_json({"message": formatted, "status": "success"})
-        except WebSocketDisconnect:
-            print("WebSocket desconectado")
-        except Exception as e:
-            await ws.send_json({"message":f"Error interno: {e}","status":"error"})
 
     def _format_response(self, text: str) -> str:
-        # Markdown [label](url) → <a>
+        # 1) Markdown [etiqueta](url) → <a>etiqueta</a>
         def md_link(m):
             label, url = m.group(1), m.group(2)
             return f'<a href="{url}" class="recommendation-link" target="_blank">{label}</a>'
 
-        html = re.sub(
-            r"\[([^\]]+)\]\((https?://[^\)]+)\)",
-            md_link,
-            text
-        )
-        # "Enlace: https://..." → <a>Ver plan</a>
-        html = re.sub(
-            r"Enlace:\s*(https?://\S+)",
-            lambda m: f'<a href="{m.group(1)}" class="recommendation-link" target="_blank">Ver plan</a>',
-            html
-        )
-        # Wrap lines in <p>
+        html = re.sub(r"\[([^\]]+)\]\((https?://[^\)]+)\)", md_link, text)
+
+        # 2) Ahora las líneas de la forma "Enlace o contacto: URL"
+        def repl_plan_link(m):
+            url = m.group(1)
+            # extraer id
+            match = re.search(r"/accommodation/(\d+)", url)
+            if match:
+                pid = int(match.group(1))
+                plan = next((p for p in self.plans if p["id"] == pid), None)
+                label = plan["nombre"] if plan and "nombre" in plan else "Ver plan"
+            else:
+                label = "Ver plan"
+            return f'Enlace o contacto: <a href="{url}" class="recommendation-link" target="_blank">{label}</a>'
+
+        html = re.sub(r"Enlace o contacto:\s*(https?://\S+)", repl_plan_link, html)
+
+        # 3) envolver cada línea en <p>
         return "".join(
             f"<p>{line}</p>" if line.strip() else "<p></p>"
             for line in html.split("\n")
