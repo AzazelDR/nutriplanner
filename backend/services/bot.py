@@ -195,6 +195,6 @@ class BotService:
 
     def _create_link(self, item_id: str, name: str, item_type: str) -> str:
         """Construye un <a> apuntando al plan o lugar en el frontend."""
-        base_url = "https://explore-sv-frontend.vercel.app/"
+        base_url = "https://nutriplanner-ia.vercel.app/"
         path = "accommodation" if item_type == "plan" else "recommended_place"
         return f'<a href="{base_url}{path}/{item_id}" class="recommendation-link">{name}</a>'
