@@ -106,7 +106,7 @@ class BotService:
 
         await ws.send_json(
             {
-                "message": "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?",
+                "message": "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?",
                 "status": "success",
             }
         )
@@ -139,22 +139,28 @@ class BotService:
             )
 
     # -------------------------- Formateo utilitario -------------------------
-        def _format_response(self, text: str) -> str:
-        # --- [etiqueta](url) -> <a> ---
-            html = re.sub(
-                r"\[([^\]]+)\]\((https?://[^\)]+)\)",
-                lambda m: (
-                    f'<a href="{m.group(2)}" '
-                    f'class="recommendation-link" target="_blank" rel="noopener noreferrer">'
-                    f'{m.group(1)}</a>'
-                ),
-                text,
-            )
+    def _format_response(self, text: str) -> str:
+        """
+        • Convierte [etiqueta](url) en <a class="recommendation-link">.
+        • Reemplaza “Enlace o contacto: URL” por el mismo anchor.
+        • Envuelve cada línea en <p>.
+        """
+        html = text  # <- punto de partida
 
-        # --- “Enlace o contacto: URL” -> anchor con misma clase ---
+        # 1) Markdown [etiqueta](url) -> <a>
+        html = re.sub(
+            r"\[([^\]]+)\]\((https?://[^\)]+)\)",
+            lambda m: (
+                f'<a href="{m.group(2)}" class="recommendation-link" '
+                f'target="_blank" rel="noopener noreferrer">{m.group(1)}</a>'
+            ),
+            html,
+        )
+
+        # 2) “Enlace o contacto: URL” -> <a>
         def repl_plan_link(m):
             url = m.group(1)
-            match = re.search(r"/accommodation/(\d+)", url)
+            match = re.search(r"/accommodation/(\\d+)", url)
             if match:
                 pid = int(match.group(1))
                 plan = next((p for p in self.plans if p.get("id") == pid), None)
@@ -166,9 +172,9 @@ class BotService:
                 f'target="_blank" rel="noopener noreferrer">{label}</a>'
             )
 
-        html = re.sub(r"Enlace o contacto:\s*(https?://\S+)", repl_plan_link, html)
+        html = re.sub(r"Enlace:\s*(https?://\S+)", repl_plan_link, html)
 
-        # --- envuelve cada línea en <p> ---
+        # 3) <p> por línea
         return "".join(
             f"<p>{line}</p>" if line.strip() else "<p></p>"
             for line in html.split("\n")
