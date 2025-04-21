@@ -86,6 +86,68 @@ class BotService:
 
         try:
             while True:
+                data     = await ws.receive_json()
+                user_msg = data.get("message", "").strip()
+                if not user_msg:
+                    await ws.send_json({
+                        "message": "No recibí tu mensaje, inténtalo de nuevo.",
+                        "status": "error"
+                    })
+                    continue
+
+                # Detectamos si menciona un plan y/o un padecimiento
+                tiene_plan    = bool(re.search(r"\bplan\b", user_msg, re.IGNORECASE))
+                tiene_enfer   = bool(re.search(r"\b(alergi[ao]|diabet|hipertens|trastorn)\b", user_msg, re.IGNORECASE))
+
+                if tiene_plan or tiene_enfer:
+                    html_total = ""
+
+                    # —— Si pide plan, preguntamos a Gemini y formateamos —— 
+                    if tiene_plan:
+                        resp      = chat.send_message(user_msg)
+                        raw       = resp.candidates[0].content.parts[0].text
+                        html_plan = self._format_response(raw)
+                        html_total += html_plan
+
+                    # —— Si menciona enfermedad, añadimos ficha del doctor —— 
+                    if tiene_enfer:
+                        doctores = self.support_service.get_all()
+                        doc       = doctores[0]  # o filtrado según especialidad
+                        texto_doc = (
+                            "He visto que mencionas un padecimiento.\n\n"
+                            "Te recomiendo el siguiente especialista:\n\n"
+                            f"- {doc['Name']} ({doc['Especialidad']})\n"
+                            f"  Descripción: {doc['Descripcion']}\n"
+                            f"  Teléfono: {doc['Telefono']}\n"
+                            f"  Link: {doc['Link']}\n\n"
+                            "¡Espero que te sea de ayuda!"
+                        )
+                        # envolvemos cada línea en <p>
+                        html_doc = "".join(f"<p>{línea}</p>" for línea in texto_doc.split("\n"))
+                        html_total += html_doc
+
+                    await ws.send_json({"message": html_total, "status": "success"})
+                    continue
+
+                # —— Si no es ni plan ni padecimiento, va directo a Gemini —— 
+                resp      = chat.send_message(user_msg)
+                raw       = resp.candidates[0].content.parts[0].text
+                formatted = self._format_response(raw)
+                await ws.send_json({"message": formatted, "status": "success"})
+
+        except WebSocketDisconnect:
+            print("WebSocket desconectado")
+        except Exception as e:
+            await ws.send_json({"message": f"Error interno: {e}", "status": "error"})
+        await ws.accept()
+        chat = self.model.start_chat(history=self.history)
+
+        # Saludo inicial
+        saludo = "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?"
+        await ws.send_json({"message": saludo, "status": "success"})
+
+        try:
+            while True:
                 data    = await ws.receive_json()
                 user_msg= data.get("message","").strip()
                 if not user_msg:
