@@ -84,39 +84,51 @@ class BotService:
         await ws.accept()
         chat = self.model.start_chat(history=self.history)
 
-        # saludo inicial
-        await ws.send_json({"message": "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?", "status": "success"})
+        # Saludo inicial
+        saludo = "¡Hola! Soy NutriPlanner AI. ¿En qué puedo ayudarte hoy?"
+        await ws.send_json({"message": saludo, "status": "success"})
 
         try:
             while True:
                 data = await ws.receive_json()
                 user_msg = data.get("message", "").strip()
                 if not user_msg:
-                    await ws.send_json({"message": "No recibí tu mensaje, inténtalo de nuevo.", "status": "error"})
+                    await ws.send_json({
+                        "message": "No recibí tu mensaje, inténtalo de nuevo.",
+                        "status": "error"
+                    })
                     continue
 
-                # --- vamos a generar primero el plan con Gemini ---
+                # --- Detectar alergias/enfermedades ---
+                if re.search(r'\b(alergi[ao]|diabet|hipertens)\b', user_msg, re.IGNORECASE):
+                    # 1) pedimos planes a Gemini
+                    resp = chat.send_message(user_msg)
+                    raw = resp.candidates[0].content.parts[0].text
+                    planes_html = self._format_response(raw)
+
+                    # 2) buscamos doctor apropiado
+                    doctores = self.support_service.get_all()
+                    doc = doctores[0]  # aquí tu lógica de selección
+                    doctor_text = (
+                        f"También te recomiendo el siguiente especialista:\n\n"
+                        f"- {doc['Name']} ({doc['Especialidad']})\n"
+                        f"  Descripción: {doc['Descripcion']}\n"
+                        f"  Teléfono: {doc['Telefono']}\n"
+                        f"  Link: {doc['Link']}\n\n"
+                    )
+                    # envolvemos en <p> cada línea
+                    doctor_html = "".join(f"<p>{l}</p>" for l in doctor_text.split("\n"))
+
+                    # 3) mandamos TODO en un único JSON
+                    combined = planes_html + doctor_html
+                    await ws.send_json({"message": combined, "status": "success"})
+                    continue
+
+                # --- Caso normal: sólo planes ---
                 resp = chat.send_message(user_msg)
                 raw = resp.candidates[0].content.parts[0].text
-                formatted_plans = self._format_response(raw)
-
-                # --- si hay alergia, añadimos doctor ---
-                if re.search(r'\b(alergi[ao]|diabet|hipertens)\b', user_msg, re.IGNORECASE):
-                    doc = self.support_service.get_all()[0]
-                    texto_doc = (
-                        "<p>He visto que mencionas un padecimiento.</p>"
-                        "<p>Te recomiendo el siguiente especialista:</p>"
-                        f"<p>- {doc['Name']} ({doc['Especialidad']})</p>"
-                        f"<p>  Descripción: {doc['Descripcion']}</p>"
-                        f"<p>  Teléfono: {doc['Telefono']}</p>"
-                        f"<p>  Link: <a href=\"{doc['Link']}\" class=\"recommendation-link\" target=\"_blank\">{doc['Name']}</a></p>"
-                        "<p>¡Espero que te sea de ayuda!</p>"
-                    )
-                    full = formatted_plans + texto_doc
-                    await ws.send_json({"message": full, "status": "success"})
-                else:
-                    # solo planes
-                    await ws.send_json({"message": formatted_plans, "status": "success"})
+                formatted = self._format_response(raw)
+                await ws.send_json({"message": formatted, "status": "success"})
 
         except WebSocketDisconnect:
             print("WebSocket desconectado")
@@ -142,7 +154,7 @@ class BotService:
                 label = plan["nombre"] if plan and "nombre" in plan else "Ver plan"
             else:
                 label = "Ver plan"
-            return f'Enlace o contacto: <a href="{url}" class="recommendation-link" target="_blank">{label}</a>'
+            return f'Ver plan: <a href="{url}" class="recommendation-link" target="_blank">{label}</a>'
 
         html = re.sub(r"Enlace o contacto:\s*(https?://\S+)", repl_plan_link, html)
 
