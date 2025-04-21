@@ -99,36 +99,28 @@ class BotService:
                     })
                     continue
 
-                # --- Detectar alergias/enfermedades ---
-                if re.search(r'\b(alergi[ao]|diabet|hipertens)\b', user_msg, re.IGNORECASE):
-                    # 1) pedimos planes a Gemini
-                    resp = chat.send_message(user_msg)
-                    raw = resp.candidates[0].content.parts[0].text
-                    planes_html = self._format_response(raw)
+                # 1. ¿Se necesita especialista?
+                needs_doc = self._needs_specialist(user_msg)
 
-                    # 2) buscamos doctor apropiado
-                    doctores = self.support_service.get_all()
-                    doc = doctores[0]  # aquí tu lógica de selección
-                    doctor_text = (
-                        f"También te recomiendo el siguiente especialista:\n\n"
-                        f"- {doc['Name']} ({doc['Especialidad']})\n"
-                        f"  Descripción: {doc['Descripcion']}\n"
-                        f"  Teléfono: {doc['Telefono']}\n"
-                        f"  Link: {doc['Link']}\n\n"
-                    )
-                    # envolvemos en <p> cada línea
-                    doctor_html = "".join(f"<p>{l}</p>" for l in doctor_text.split("\n"))
-
-                    # 3) mandamos TODO en un único JSON
-                    combined = planes_html + doctor_html
-                    await ws.send_json({"message": combined, "status": "success"})
-                    continue
-
-                # --- Caso normal: sólo planes ---
+                # 2. Pide la respuesta de planes a Gemini
                 resp = chat.send_message(user_msg)
-                raw = resp.candidates[0].content.parts[0].text
-                formatted = self._format_response(raw)
-                await ws.send_json({"message": formatted, "status": "success"})
+                planes_html = self._format_response(
+                    resp.candidates[0].content.parts[0].text
+                )
+
+                # 3. Si hace falta, añade el doctor
+                if needs_doc:
+                    doc = self.support_service.pick_specialist_for(user_msg)  # tu lógica
+                    doctor_html = (
+                        f"<p><strong>{doc['Name']}</strong> — {doc['Especialidad']}</p>"
+                        f"<p>📞 {doc['Telefono']}</p>"
+                        f"<p>{doc['Descripcion']}</p>"
+                        f"<p><a href=\"{doc['Link']}\" target=\"_blank\""
+                        f"   class=\"recommendation-link\">Ver Perfil</a></p>"
+                    )
+                    planes_html += doctor_html
+
+                await ws.send_json({"message": planes_html, "status": "success"})
 
         except WebSocketDisconnect:
             print("WebSocket desconectado")
@@ -163,3 +155,19 @@ class BotService:
             f"<p>{line}</p>" if line.strip() else "<p></p>"
             for line in html.split("\n")
         )
+    def _needs_specialist(self, message: str) -> bool:
+        """
+        Pregunta a Gemini si el mensaje del usuario menciona alguna
+        alergia, intolerancia o enfermedad que requiera un especialista.
+        Devuelve True/False.
+        """
+        prompt = (
+            "Lee el siguiente mensaje de un paciente y responde "
+            "solo con 'sí' o 'no' (sin nada más):\n\n"
+            f"{message}\n\n"
+            "¿El paciente menciona una alergia, intolerancia o "
+            "enfermedad que requiera consultar con un especialista?"
+        )
+        resp = self.model.generate_content(prompt)
+        answer = resp.text.strip().lower()
+        return answer.startswith("s")   # 'sí' / 'si'
