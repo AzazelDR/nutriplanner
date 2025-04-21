@@ -18,15 +18,9 @@ export const AccommodationsSupport: React.FC = () => {
 
   useEffect(() => {
     const ws = new WebSocket('wss://nutriplanner.up.railway.app/ws/support');
-
-    ws.onopen = () => {
-      console.log('WS soporte abierto');
-    };
-
-    ws.onerror = () => {
-      setError('⚠️ No se pudo conectar al servicio de soporte.');
-    };
-
+  
+    ws.onopen = () => console.log('WS soporte abierto');
+    ws.onerror = () => setError('⚠️ No se pudo conectar al servicio de soporte.');
     ws.onmessage = (event) => {
       try {
         const { data } = JSON.parse(event.data);
@@ -37,11 +31,9 @@ export const AccommodationsSupport: React.FC = () => {
         ws.close();
       }
     };
-
+  
     return () => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.close();
-      }
+      if (ws.readyState === WebSocket.OPEN) ws.close();
     };
   }, []);
 

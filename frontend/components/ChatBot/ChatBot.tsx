@@ -21,9 +21,9 @@ const [messages, setMessages] = useState<Message[]>([]);
   const messageEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(
-      'wss://nutriplanner.up.railway.app/chatbot'
-    ); 
+    const ws = new WebSocket('wss://nutriplanner.up.railway.app/chatbot');
+
+
 
     ws.onerror = () => {
       setMessages((prev) => [
