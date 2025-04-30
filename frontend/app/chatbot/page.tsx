@@ -3,8 +3,8 @@ import { ChatBot } from '@/components/ChatBot/ChatBot';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Asistente Virtual',
-  description: 'Interactúa con nuestro asistente virtual para resolver tus dudas sobre nutrición.',
+  title: 'Agente Virtual',
+  description: 'Interactúa con nuestro agente virtual para resolver tus dudas sobre nutrición.',
 };
 
 const ChatBotPage = () => {

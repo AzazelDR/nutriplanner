@@ -9,7 +9,7 @@ import styles from './Navbar.module.css';
 
 const navItems = [
   { href: '/', label: 'Inicio' },
-  { href: '/chatbot', label: 'Asistente' },
+  { href: '/chatbot', label: 'Agente Virtual' },
   { href: '/accommodations-support', label: 'Soporte' },
 ];
 
@@ -25,7 +25,7 @@ export const Navbar: React.FC = () => {
       transition={{ type: 'spring', stiffness: 120 }}
     >
       <div className={styles.logo}>
-        <Link href="/">NutriPlanner AI</Link>
+        <Link href="/">AR Nutrición IA</Link>
       </div>
 
       <button

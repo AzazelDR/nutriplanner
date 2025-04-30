@@ -7,21 +7,21 @@ import styles from './Home.module.css';
 
 const featureList = [
   'Planes de alimentación personalizados.',
-  'Asistente virtual para consultas en tiempo real.',
+  'Agente virtual para consultas en tiempo real.',
   'Recetas saludables basadas en tus ingredientes disponibles.',
   'Optimización de la planificación alimenticia.',
 ];
 
 export const Home: React.FC = () => {
   const ctaItems = [
-    { href: '/chatbot', label: 'Asistente Virtual' },
+    { href: '/chatbot', label: 'Agente Virtual' },
     { href: '/accommodations-support', label: 'Soporte Nutricional' },
   ];
 
   return (
     <main className={styles.main}>
       <section className={styles.hero}>
-        <h1 className={styles.title}>Bienvenido a NutriPlanner AI</h1>
+        <h1 className={styles.title}>Bienvenido a AR Nutrición IA</h1>
         <p className={styles.subtitle}>Optimiza tu alimentación con inteligencia artificial.</p>
       </section>
 

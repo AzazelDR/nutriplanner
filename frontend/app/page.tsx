@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Inicio',
-  description: 'NutriPlanner AI es un sistema de recomendación de planes de alimentación saludable con un asistente virtual basado en inteligencia artificial.',
+  description: 'AR Nutrición IA es un sistema de recomendación de planes de alimentación saludable con un agente virtual basado en inteligencia artificial.',
 };
 
 const HomePage = () => {

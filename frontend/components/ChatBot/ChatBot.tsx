@@ -77,7 +77,7 @@ export const ChatBot = () => {
   /* -------------  JSX ------------- */
   return (
     <div className={styles.chatbot}>
-      <h2 className={styles.title}>Asistente&nbsp;Virtual</h2>
+      <h2 className={styles.title}>Agente&nbsp;Virtual</h2>
 
       <div className={styles.messages}>
         {messages.map((m, i) => (
